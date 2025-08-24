@@ -1,0 +1,31 @@
+//
+// 2021-08-29, jjuiddong
+// control replay server protocol
+//	- websocket communication
+//	- json/binary format
+//	- control replay server <-> web server
+//       (client)                (server)
+//
+
+
+// webserver -> control replay server
+protocol s2c 10000 json
+{
+	Welcome(string msg);
+	AckLogin(string name, int result);
+	AckLogout(string name, int result);
+	ReqStartReplayServer(string name, string url);
+	ReqCloseReplayServer(string name);
+}
+
+
+
+// control server -> webserver
+protocol c2s 10100 json
+{
+	ReqLogin(string name);
+	ReqLogout(string name);
+	AckStartReplayServer(string name, string url, int result);
+	AckCloseReplayServer(string name, int result);
+}
+

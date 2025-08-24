@@ -1,0 +1,28 @@
+//
+// 2022-05-22, jjuiddong
+// file converter protocol
+//	- websocket communication
+//	- json/binary format
+//
+//	- web browser <-> filecvt server
+//	    (client)      (server)
+//			c     <->    s
+
+
+// filecvt server -> web browser
+protocol s2c 11400 json
+{
+	Welcome(string msg);
+	AckLogin(string name, int result);
+	AckLogout(string name, int result);
+	AckConvertFiles(uint total, uint procCount, int result);
+}
+
+
+// web browser -> filecvt server
+protocol c2s 11500 json
+{
+	ReqLogin(string name);
+	ReqLogout(string name);
+	ReqConvertFiles(ushort total, ushort index, vector<BYTE> stream);
+}

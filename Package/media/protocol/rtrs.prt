@@ -1,0 +1,25 @@
+//
+// realtime robot state information protocol (RTRS)
+//	- binary format
+//	-    robot    <->  robot control server (cluster)
+//	   (Client)          (Server)
+//
+
+// robot -> robot control server
+protocol c2s 7101
+{
+
+	RealtimeRobotState(string robotName, int state1, int state2
+		, int state3, int state4, Vector3 pos, Vector3 dir, float speed, double time
+		, vector<float> data1 );
+
+	LaserScan(string robotName, float angle_min, float angle_max, float angle_increment
+		, float time_increment, float scan_time, float range_min, float range_max
+		, vector<float> ranges, vector<float> intensities );
+
+	LaserScanStream(string robotName, uint total, uint index, vector<float> stream);
+
+	CameraInfo(string robotName, uint width, uint height, string encoding);
+	CameraStream(string robotName, uint total, uint index, vector<char> stream);
+
+}

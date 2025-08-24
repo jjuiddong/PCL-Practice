@@ -1,0 +1,71 @@
+//
+// 2021-08-31, jjuiddong
+// replay protocol
+//	- websocket communication
+//	- json/binary format
+//
+//	- web browser <-> replay server
+//	    (client)      (server)
+//			c     <->    s
+
+
+// replay server -> web browser
+protocol s2c 11200 json
+{
+	Welcome(string msg);
+	AckLogin(string name, int result);
+	AckLogout(string name, int result);
+	AckLogFileList(int start, int size, int totalSize, vector<string> files);
+	AckSearchLogFile(string searchStr, int start, int size, int totalSize
+		, vector<string> files);
+	AckLogFileInfo(string fileName, string projectName, vector<string> files
+		, uint64 startTime, uint timeRange, int result);
+	AckPlay(string fileName, string projectName, vector<string> files
+		, uint64 startTime, uint timeRange, int replayId, int result);
+	AckResume(int replayId, int result);
+	AckPause(int replayId, int result);
+	AckStop(int replayId, int result);
+	AckAdjustTime(int replayId, uint time, int result);
+	Progress(uint curTime, float ratio, uint dateTime1, uint dateTime2);
+	PacketString(int id, uint64 dateTime, string str);
+
+	AckMapFile(string fileName, int id, int result);
+	AckPathFile(string fileName, int id, int result);
+	AckNodeFile(string fileName, int id, int result);
+	AckJsFile(string fileName, int id, int result);
+	AckRobotFile(string fileName, int id, int result);
+	AckTaskFile(string fileName, int id, int result);
+	AckIntermediateCode(string fileName, int id, int result);
+
+	AckFileStreaming(int id, ushort count, ushort index, uint totalBufferSize
+		, vector<BYTE> data);
+
+	ReqPing(int id);
+}
+
+
+// web browser -> replay server
+protocol c2s 11300 json
+{
+	ReqLogin(string name);
+	ReqLogout(string name);
+	ReqLogFileList(int start, int size);
+	ReqSearchLogFile(string searchStr, int start, int size);
+	ReqLogFileInfo(string fileName);
+	ReqPlay(string fileName);
+	ReqResume(int replayId);
+	ReqPause(int replayId);
+	ReqStop(int replayId);
+	ReqAdjustTime(int replayId, uint time);
+	
+	ReqMapFile(string fileName);
+	ReqPathFile(string fileName);
+	ReqNodeFile(string fileName);
+	ReqJsFile(string fileName);
+	ReqRobotFile(string fileName);
+	ReqTaskFile(string fileName);
+	ReqIntermediateCode(string fileName);
+
+	AckPing(int id, int result);
+}
+

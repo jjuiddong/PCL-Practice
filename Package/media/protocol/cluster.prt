@@ -1,0 +1,99 @@
+//
+// 2020-12-31, jjuiddong
+// cluster protocol
+//	- websocket communication
+//		- json/binary format
+//	- cluster info, robot info sync
+//
+//	-  cluster  <->  web browser
+//    (Server)        (client)
+//
+
+
+// cluster -> web browser
+protocol s2c 8200 json
+{
+	Welcome(string msg);
+	AckLogin(string name, int result);
+	AckLogout(string name, int result);
+	AckRun(string projectName, string mapFileName, string pathFileName
+		, vector<string> nodeFileNames, string taskName, int result);
+	AckStop(int result);
+	ReadySimulationState(string msg);
+
+	SpawnRobot(string robotName, string modelName);
+	RemoveRobot(string robotName);
+	RobotWorkFinish(string robotName, uint taskId, uint totalWorkCount, uint finishWorkCount);
+	RobotTaskFinish(string robotName, uint taskId);
+	RobotTaskRepeat(string robotName);
+	RobotTaskUpdate(string robotName, uint taskId, string str);
+	RobotTaskStream(uint total, uint index, vector<char> stream);
+	RobotLocalTaskStream(uint total, uint index, vector<char> stream);
+
+	RealtimeRobotState(string robotName, BYTE state1, BYTE state2
+		, BYTE state3, BYTE state4, BYTE state5, BYTE state6, Vector3 pos, Vector3 dir, float speed
+		, vector<float> data1);
+	LaserScan(string robotName, float angle_min, float angle_max, float angle_increment
+		, float time_increment, float scan_time, float range_min, float range_max
+		, vector<float> ranges, vector<float> intensities );
+	LaserScanStream(string robotName, uint total, uint index, vector<float> stream);
+
+	CameraInfo(string robotName, uint width, uint height, string encoding);
+	CameraStream(string robotName, uint total, uint index, vector<char> stream);
+
+	RobotPath(string robotName, vector<ushort> path, vector<ushort> wtimes);
+	CollisionDetect(vector<string> robotNames);
+
+	SpawnObject(string objectName, string prefabName, uint taskId, Vector3 pos, Vector3 dir);
+	SpawnObject2(string objectName, string prefabName, uint taskId, string parent, Vector3 pos, Vector3 dir);
+	RemoveObject(string objectName);
+	ObjectPos(string objectName, uint taskId, Vector3 pos, Vector3 dir);
+
+	AckLogFileName(string logFileName);
+	AckAddCollisionBoundary(string name, int type, int coltype, Vector3 pos, Vector3 scale, Vector3 dir, int result);
+	AckRemoveCollisionBoundary(string name, int result);
+
+	AckRobotTaskInfo(string robotName, int result);
+	AckRobotTaskInfoStream(string robotName, string info);
+	AckRobotWorkFlowInfoStream(string robotName, string info);
+
+	AckSimulationSpeed(float timeScale, int result);
+
+	ClusterMonitor(vector<int> procs, vector<int> netTraffics);
+
+	PacketString(int id, uint64 dateTime, string str);
+	AckPacketString(bool enable, int result);
+
+	ReqPing(int id);
+}
+
+
+// web browser -> cluster
+protocol c2s 8300 json
+{
+	ReqLogin(string name);
+	ReqLogout(string name);
+	ReqRun(string projectName, string mapFileName, string pathFileName
+		, vector<string> nodeFileNames, string taskName);
+	ReqStop();
+	ReqLogFileName();
+	ReqAddCollisionBoundary(string name, Vector3 pos, Vector3 scale);
+	ReqRemoveCollisionBoundary(string name);
+
+	ReqRobotTaskInfo(string robotName);
+
+	ReqSimulationSpeed(float timeScale);
+
+	ReqPacketString(bool enable);
+
+	AckPing(int id, int result);
+}
+
+
+// custom type
+struct Vector3 
+{
+	float x;
+	float y;
+	float z;
+}

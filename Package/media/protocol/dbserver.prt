@@ -1,0 +1,42 @@
+//
+// 2021-11-04, jjiuddong
+// dbserver protocol
+//	- binary format protocol
+//
+
+
+// dbserver -> client
+protocol s2c 13000
+{
+	Welcome(string msg);
+	AckLogin(string name, int result);
+	AckLogout(string name, int result);
+	
+	AckMap(ushort id, string author, string project, string fileName, int result);
+	AckPath(ushort id, string author, string project, string fileName, int result);
+	AckNode(ushort id, string author, string project, string fileName, int result);
+	AckJs(ushort id, string author, string project, string fileName, int result);
+	AckRobot(ushort id, string author, string project, string fileName, int result);
+	AckTask(ushort id, string author, string project, string fileName, int result);
+	AckModel(ushort id, string author, string project, string fileName, int result);
+	AckBlob(ushort id, string author, string project, string fileName, string type, int result);
+
+	AckStreaming(ushort id, uint startIndex, uint totalSize, vector<BYTE> data);
+}
+
+
+// client -> dbserver
+protocol c2s 13001
+{
+	ReqLogin(string name);
+	ReqLogout(string name);
+
+	ReqMap(ushort id, string author, string project, string fileName, string writePath);
+	ReqPath(ushort id, string author, string project, string fileName, string writePath);
+	ReqNode(ushort id, string author, string project, string fileName, string writePath);
+	ReqJs(ushort id, string author, string project, string fileName, string writePath);
+	ReqRobot(ushort id, string author, string project, string fileName, string writePath);
+	ReqTask(ushort id, string author, string project, string fileName, string writePath);
+	ReqModel(ushort id, string author, string project, string fileName, string writePath);
+	ReqBlob(ushort id, string author, string project, string fileName, string type, string writePath);
+}

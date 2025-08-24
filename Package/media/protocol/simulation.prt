@@ -1,0 +1,45 @@
+//
+// simulation protocol
+//	- control server <-> simulation server
+//       (Server)            (Client)
+//
+
+
+// control server -> simulation client
+protocol s2c 3000
+{
+	Welcome(string msg);
+	AckLogin(string id, int result);
+	AckLogout(string id, int result);
+	ReqRun(string simulName, string author, string projectName, string mapFileName
+		, string pathFileName, string ip, int port);
+	ReqStop(string simulName);
+	ReqSimulationSpeed(string simulName, float timeScale);
+	ReqPause(string simulName);
+	ReqResume(string simulName);
+	ReqSpawnRobot(int vmId, string simulName, string name, string robotFileName, string vertex, Vector3 dir);
+	ReqSpawnRobot2(int vmId, string simulName, string name, string robotFileName, Vector3 pos);
+	ReqRemoveRobot(int vmId, string simulName, string name);
+	ReqPositionRobot(int vmId, string simulName, string name, string vertex, Vector3 dir);
+	ReqPosition3DRobot(int vmId, string simulName, string name, Vector3 pos, Vector3 dir);
+}
+
+
+// simulation client-> control server
+protocol c2s 4000
+{
+	ReqLogin(string id);
+	ReqLogout(string id);
+	AckRun(string simulName, string author, string projectName, string mapFileName
+		, string pathFileName, int result);
+	AckStop(string simulName, int result);
+	AckSimulationSpeed(string simulName, float timeScale, int result);
+	AckPause(string simulName, int result);
+	AckResume(string simulName, int result);
+	AckSpawnRobot(int vmId, string simulName, string name, string robotFileName, int result);
+	AckSpawnRobot2(int vmId, string simulName, string name, string robotFileName, int result);
+	AckRemoveRobot(int vmId, string simulName, string name, int result);
+	AckPositionRobot(int vmId, string simulName, string name, string vertex, int result);
+	AckPosition3DRobot(int vmId, string simulName, string name, Vector3 pos, int result);
+}
+

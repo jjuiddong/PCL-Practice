@@ -1,0 +1,43 @@
+//
+// 2023-06-12, jjuiddong
+// master server protocol
+//	- websocket communication
+//	- json/binary format
+//
+//	-  master server <->  web browser
+//    (Server)             (client)
+//
+
+
+// master server -> web browser
+protocol s2c 9000 json
+{
+	Welcome(string msg);
+	AckLogin(string name, int result);
+	AckLogout(string name, int result);
+
+	ClusterMonitor(string ctrlSvrName, string clusterName, uint robotCnt
+		, vector<int> procs, vector<int> netTraffics);
+	ClusterStatistics(string ctrlSvrName, string clusterName
+		, int type, vector<float> data);
+	GraphStream(int id, int type, int size, int chunkSize, int chunkIdx, vector<float> data);
+
+	AckLogFileList(int start, int size, vector<string> logFileNames);
+	AckLogFile(string logName, int result);
+
+	ReqPing(int id);
+}
+
+
+// web browser -> master server
+protocol c2s 9100 json
+{
+	ReqLogin(string name);
+	ReqLogout(string name);
+
+	ReqLogFileList(int start, int size);
+	ReqLogFile(string logName);
+
+	AckPing(int id, int result);
+}
+

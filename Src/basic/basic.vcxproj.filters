@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="basic.cpp" />
+    <ClCompile Include="..\commonlib\pointcloud.cpp">
+      <Filter>commonlib</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="3dview.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="commonlib">
+      <UniqueIdentifier>{6780010b-361b-44d7-a996-380ddcd5851d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\commonlib\pointcloud.h">
+      <Filter>commonlib</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="3dview.h" />
+  </ItemGroup>
+</Project>

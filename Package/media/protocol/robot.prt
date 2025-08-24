@@ -1,0 +1,90 @@
+//
+// robot protocol
+//	-    robot    <->  robot control server (cluster)
+//	   (Client)          (Server)
+//
+
+
+// robot control server -> robot
+protocol s2c 7000
+{
+	Welcome( string msg );
+	AckLogin( string name, int rtrsSvrPort, int result );
+	AckLogout( string name, int result );
+	AckPathData( BYTE id, BYTE result, BYTE count, BYTE index, uint bufferSize
+		, vector<BYTE> data );
+	AckInitializeEnd();
+	ReqMovable( string name, int moveType, uint pfId, vector<ushort> path );
+	ReqPathChangable( string name, int moveType, uint pfId, vector<ushort> path );
+	ReqChangePath( string name, int moveType, uint pfId, vector<ushort> path, vector<ushort> wtimes );
+	ReqMove( string name, int moveType, uint pfId, vector<ushort> path, vector<ushort> wtimes );
+	ReqMoveCancel( string name, int stopVtxIdx );
+	ReqRotate( string name, Vector3 dir );
+	ReqLoad( string name, uint vtxIdx, string workBoundary );
+	ReqUnload( string name, uint vtxIdx, string workBoundary );
+	ReqInitPose( string name);
+	ReqRoll( string name, float angle);
+	ReqPitch( string name, float angle);
+	ReqYaw( string name, float angle);
+	ReqDirection( string name, Vector3 dir);
+	ReqLineMove( string name, Vector3 pos);
+	ReqCharge( string name, uint vtxIdx, string workBoundary );
+	ReqChargeStop( string name );
+	ReqWait( string name, int delayTime );
+	ReqEmergencyStop( string name, int type );
+	AckWork( string name, int result );
+	ReqUntil( string name, int vmId, string smsg, string fmsg, int time );
+	ReqMessage( string name, int vmId, string sender, string msg );
+}
+
+
+// robot -> robot control server
+protocol c2s 7100
+{
+	ReqLogin( string name );
+	ReqLogout( string name );
+	ReqPathData(string name);
+	InitializeEnd(string name);
+	AckMovable( string name, uint pfId, int result );
+	AckPathChangable( string name, uint pfId, int result );
+	AckChangePath( string name, uint pfId, int result );
+	AckMove( string name, uint pfId, int result );
+	AckMoveEnd( string name, uint vtxIdx, uint pfId, int result );
+	AckMoveCancel( string name, int stopVtxIdx, uint pfId, int result );
+	AckRotate( string name, int result );
+	AckRotateEnd( string name, int result );
+	AckLoad( string name, uint vtxIdx, int result );
+	AckLoadEnd( string name, uint vtxIdx, int result );
+	AckUnload( string name, uint vtxIdx, int result );
+	AckUnloadEnd( string name, uint vtxIdx, int result );
+	AckInitPose( string name, int result);
+	AckInitPoseEnd( string name, int result);
+	AckRoll( string name, float angle, int result);
+	AckRollEnd( string name, float angle, int result);
+	AckPitch( string name, float angle, int result);
+	AckPitchEnd( string name, float angle, int result);
+	AckYaw( string name, float angle, int result);
+	AckYawEnd( string name, float angle, int result);
+	AckDirection( string name, Vector3 dir, int result);
+	AckDirectionEnd( string name, Vector3 dir, int result);
+	AckLineMove( string name, Vector3 pos, int result);
+	AckLineMoveEnd( string name, Vector3 pos, int result);
+	AckCharge( string name, uint vtxIdx, int result );
+	AckChargeEnd( string name, uint vtxIdx, int result );
+	AckChargeStop( string name, int result );
+	AckWait( string name, int result );
+	AckEmergencyStop( string name, int type, int result );
+	ReqWork(string name);
+	AckUntil( string name, int vmId, string smsg, string fmsg, int time, int result );
+	AwakeUntil( string name, int state, int result );
+	AckMessage( string name, int vmId, string sender, string msg, int result );
+}
+
+
+// custom type
+struct Vector3 
+{
+	float x;
+	float y;
+	float z;
+}
